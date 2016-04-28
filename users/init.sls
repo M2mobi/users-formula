@@ -566,6 +566,33 @@ users_{{ name }}_user_gitconfig_absent_{{ key }}:
 
 {% endif %}
 
+{% if 'aws_profiles' in user %}
+users_{{ name }}_user_aws_profile_credentials:
+  file.managed:
+    - name: {{ home }}/.aws/credentials
+    - user: {{ name }}
+    - group: {{ user_group }}
+    - mode: 640
+    - template: jinja
+    - makedirs: True
+    - source: salt://users/files/awscli/credentials
+    - context:
+        config: {{ user['aws_profiles'] }}
+
+users_{{ name }}_user_aws_profile_config:
+  file.managed:
+    - name: {{ home }}/.aws/config
+    - user: {{ name }}
+    - group: {{ user_group }}
+    - mode: 640
+    - template: jinja
+    - source: salt://users/files/awscli/config
+    - context:
+        config: {{ user['aws_profiles'] }}
+    - require:
+      - file: users_{{ name }}_user_aws_profile_credentials
+{% endif %}
+
 {% endfor %}
 
 
