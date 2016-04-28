@@ -1,0 +1,10 @@
+{%- for key, value in config.items() %}
+{%- if key == 'default' %}
+[{{ key }}]
+{%- else %}
+[profile {{ key }}]
+{%- endif %}
+region={{ value['region'] }}
+output={{ value['output'] }}
+
+{%- endfor %}
