@@ -577,7 +577,7 @@ users_{{ name }}_user_aws_profile_credentials:
     - makedirs: True
     - source: salt://users/files/awscli/credentials
     - context:
-        config: {{ user['aws_profiles'] }}
+        config: {{ user['aws_profiles'] | tojson }}
 
 users_{{ name }}_user_aws_profile_config:
   file.managed:
@@ -588,7 +588,7 @@ users_{{ name }}_user_aws_profile_config:
     - template: jinja
     - source: salt://users/files/awscli/config
     - context:
-        config: {{ user['aws_profiles'] }}
+        config: {{ user['aws_profiles'] | tojson }}
     - require:
       - file: users_{{ name }}_user_aws_profile_credentials
 {% endif %}
