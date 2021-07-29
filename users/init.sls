@@ -593,6 +593,20 @@ users_{{ name }}_user_aws_profile_config:
       - file: users_{{ name }}_user_aws_profile_credentials
 {% endif %}
 
+{% if 'mysql' in user %}
+users_{{ name }}_user_mysql_config:
+  file.managed:
+    - name: {{ home }}/.my.cnf
+    - user: {{ name }}
+    - group: {{ user_group }}
+    - mode: 600
+    - template: jinja
+    - makedirs: True
+    - source: salt://users/files/mysql/my.cnf
+    - context:
+        config: {{ user['mysql'] | tojson }}
+{% endif %}
+
 {% endfor %}
 
 
